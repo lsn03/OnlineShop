@@ -1,10 +1,13 @@
 package com.example.springsecurityofficial.controller;
 
-import com.example.springsecurityofficial.config.ViewNames;
+import com.example.springsecurityofficial.ViewNames;
 import com.example.springsecurityofficial.entity.user.User;
 import com.example.springsecurityofficial.service.SecurityService;
 import com.example.springsecurityofficial.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -13,8 +16,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 public class UserController {
 	@Autowired
 	private UserService userService;
-	@Autowired
-	private SecurityService securityService;
 	
 	@PostMapping("/register")
 	public String registerUser(@ModelAttribute("user") User user){
@@ -32,9 +33,10 @@ public class UserController {
 	@PostMapping("/signin")
 	public String signInUser(@ModelAttribute("user")User user){
 		User res = userService.doSignIn(user);
+		
 		if(res!=null){
 			System.out.println("UserController: signInUser()\t "+user);
-			System.out.println(securityService.isAuthenticated());
+			
 			return ViewNames.indexPage;
 		}
 		System.out.println("UserController: signInUser() NULL \t "+user);

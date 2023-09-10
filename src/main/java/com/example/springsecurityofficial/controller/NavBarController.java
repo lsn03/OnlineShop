@@ -1,6 +1,6 @@
 package com.example.springsecurityofficial.controller;
 
-import com.example.springsecurityofficial.config.ViewNames;
+import com.example.springsecurityofficial.ViewNames;
 import com.example.springsecurityofficial.entity.user.User;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -14,9 +14,9 @@ public class NavBarController {
 		return ViewNames.indexPage;
 	}
 	
-	@GetMapping("/catalog")
+	@GetMapping("/chopping_cart")
 	public String getShoppingCartPage(){
-		return ViewNames.catalogPage;
+		return ViewNames.shoppingCartPage;
 	}
 	
 	
@@ -30,7 +30,7 @@ public class NavBarController {
 		model.addAttribute("user", new User());
 		return ViewNames.registrationPage;
 	}
-	@GetMapping("/catalog_page")
+	@GetMapping("/catalog")
 	public String getCatalogPage(){
 		return ViewNames.catalogPage;
 	}

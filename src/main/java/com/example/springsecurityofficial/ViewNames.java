@@ -1,4 +1,4 @@
-package com.example.springsecurityofficial.config;
+package com.example.springsecurityofficial;
 
 public class ViewNames {
 	public static final String catalogPage = "catalog-page";

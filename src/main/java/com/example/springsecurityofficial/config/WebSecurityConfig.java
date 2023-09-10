@@ -3,8 +3,10 @@ package com.example.springsecurityofficial.config;
 import com.example.springsecurityofficial.service.UserService;
 import jakarta.annotation.Resource;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.ProviderManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
@@ -25,7 +27,7 @@ import org.springframework.security.web.SecurityFilterChain;
 import javax.sql.DataSource;
 
 @Configuration
-@EnableWebSecurity
+@EnableWebSecurity(debug = true)
 public class WebSecurityConfig   {
 	
 	
@@ -37,6 +39,8 @@ public class WebSecurityConfig   {
 	@Autowired
 	private DataSource dataSource;
 	
+	@Value("${spring.websecurity.debug:false}")
+	boolean webSecurityDebug;
 	
 	@Bean
 	public AuthenticationManager authenticationManager(HttpSecurity http) throws Exception {
@@ -52,6 +56,7 @@ public class WebSecurityConfig   {
 				
 				.authorizeHttpRequests((requests) -> requests
 						.requestMatchers("/", "/signup","signin","/register","/contact_us","/static/**").permitAll()
+						.requestMatchers(HttpMethod.GET,"/api/**").permitAll()
 						.anyRequest().authenticated()
 				)
 				.formLogin((form) -> form
@@ -61,6 +66,7 @@ public class WebSecurityConfig   {
 				.logout((logout) -> logout
 						.logoutUrl("/logout")
 						.invalidateHttpSession(true)
+						.clearAuthentication(true)
 						.deleteCookies("JSESSIONID")
 						.logoutSuccessUrl("/logout" + "?logout")
 						.permitAll());
@@ -68,15 +74,15 @@ public class WebSecurityConfig   {
 		
 		return http.build();
 	}
-	@Autowired
-	public void configure(AuthenticationManagerBuilder auth) throws Exception {
-		auth.jdbcAuthentication()
-				.dataSource(dataSource)
-				.passwordEncoder(passwordEncoder)
-				.usersByUsernameQuery("select user_id " +
-						"login" +
-						"password" +
-						"role where login=?")
-		;
-	}
+//	@Autowired
+//	public void configure(AuthenticationManagerBuilder auth) throws Exception {
+//		auth.jdbcAuthentication()
+//				.dataSource(dataSource)
+//				.passwordEncoder(passwordEncoder)
+//				.usersByUsernameQuery("select user_id " +
+//						"login" +
+//						"password" +
+//						"role where login=?")
+//		;
+//	}
 }

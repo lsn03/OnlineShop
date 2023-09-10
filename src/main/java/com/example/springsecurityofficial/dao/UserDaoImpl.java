@@ -23,7 +23,9 @@ public class UserDaoImpl implements UserDAO {
 		System.out.println(user);
 		user.setPassword(passwordEncoder.encode(userPassword));
 		System.out.println(user);
+		System.out.println("crashBefore and why?");
 		entityManager.persist(user);
+		System.out.println("crashFfter");
 		return findUserByLogin(user.getLogin());
 	}
 	

@@ -1,6 +1,6 @@
 package com.example.springsecurityofficial;
 
-public class ViewNames {
+public class Pages {
 	public static final String catalogPage = "catalog-page";
 	public static final String contactUsPage = "contact-us";
 	public static final String indexPage = "index";

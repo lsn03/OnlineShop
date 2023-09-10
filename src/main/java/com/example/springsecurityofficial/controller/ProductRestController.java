@@ -4,10 +4,7 @@ import com.example.springsecurityofficial.dao.ProductDAO;
 import com.example.springsecurityofficial.entity.product.Product;
 import com.example.springsecurityofficial.service.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -26,5 +23,17 @@ public class ProductRestController {
 	public Product getProduct(@PathVariable int id){
 		Product product = productService.getProduct(id);
 		return product;
+	}
+	@PostMapping("/products")
+	public void addNewProduct(@ModelAttribute("product") Product product){
+		productService.createProduct(product);
+	}
+	@PutMapping("/products")
+	public void updateProduct(@ModelAttribute("product") Product product){
+		productService.updateProduct(product);
+	}
+	@DeleteMapping("/products/{id}")
+	public void deleteProduct(@PathVariable int id){
+		productService.deleteProduct(id);
 	}
 }

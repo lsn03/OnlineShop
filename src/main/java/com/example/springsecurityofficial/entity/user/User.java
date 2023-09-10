@@ -24,7 +24,7 @@ public class User implements UserDetails {
 	private String login;
 	@Column(name = "password")
 	@NotEmpty
-	@Size(min=8,max=50,message = "Длина пароля должна быть в диапазоне от 8 до 50")
+	@Size(min=5,max=100,message = "Длина пароля должна быть в диапазоне от 4 до 20")
 	private String password;
 	@Column(name = "role")
 	@Enumerated(EnumType.STRING)

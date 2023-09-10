@@ -37,14 +37,32 @@
                 <form th:action="@{/register}" method="post" th:object="${user}">
                     <div class="mb-3">
                         <label class="form-label" for="name">Name</label>
-                        <input class="form-control item" type="text" id="name" th:field="*{login}"></div>
+                        <input class="form-control item" type="text" id="name" th:field="*{login}">
+                        <ul th:if="${#fields.hasErrors('login')}">
+                            <li th:each="error : ${#fields.errors('login')}" th:text="${error}"></li>
+                        </ul>
+                        <ul>
+                            <li th:if="${userExists}">Имя пользователя уже занято.</li>
+                        </ul>
+
+                    </div>
                     <div class="mb-3">
                         <label class="form-label" for="password">Password</label>
-                        <input class="form-control item" type="password" id="password"th:field="*{password}"></div>
+                        <input class="form-control item" type="password" id="password"th:field="*{password}">
+                        <ul th:if="${#fields.hasErrors('password')}">
+                            <li th:each="error : ${#fields.errors('password')}" th:text="${error}"></li>
+                        </ul>
+                    </div>
                     <div class="mb-3">
                         <label class="form-label" for="confirmPassword">Confirm Password</label>
                         <input class="form-control item" type="password" id="confirmPassword" th:field="*{confirmPassword}">
+                        <ul th:if="${passwordMismatch}">
+                            <li>Пароли не совпадают</li>
+                        </ul>
                     </div>
+
+
+
                     <input type="hidden" name="role" value="USER">
                     <button class="btn btn-primary" type="submit">Зарегистрироваться</button>
                     <a class="btn btn-primary" th:href="@{/login}">Войти</a>

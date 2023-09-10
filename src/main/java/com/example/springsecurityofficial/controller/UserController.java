@@ -1,8 +1,7 @@
 package com.example.springsecurityofficial.controller;
 
-import com.example.springsecurityofficial.ViewNames;
+import com.example.springsecurityofficial.Pages;
 import com.example.springsecurityofficial.entity.user.User;
-import com.example.springsecurityofficial.service.SecurityService;
 import com.example.springsecurityofficial.service.UserService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -17,6 +16,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
 import org.springframework.security.web.context.HttpSessionSecurityContextRepository;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -27,27 +27,44 @@ public class UserController {
 	@Autowired
 	private UserService userService;
 	
-	@Autowired
-	private AuthenticationManager authenticationManager;
-	
 	@PostMapping("/register")
-	public String registerUser(@Valid @ModelAttribute("user") User user,BindingResult result, HttpServletRequest req){
+	public String registerUser(@Valid @ModelAttribute("user") User user, BindingResult result, HttpServletRequest req, Model model){
+		if(result.hasErrors()){
+			return Pages.registrationPage;
+		}
 		
 		if(!user.getConfirmPassword().equals(user.getPassword())){
-			return "registration";
+			model.addAttribute("passwordMismatch", true);
+			return Pages.registrationPage;
 		}
 		if(userService.isUserExist(user)){
-			return "registration";
+			model.addAttribute("userExists", true);
+			return Pages.registrationPage;
 		}
-		System.out.println("UserController: registerUser()\t "+user);
+		
 		User usercreated = userService.createUser(user);
 		
+		setUserRegistered(usercreated,req);
+		
+		System.out.println("UserController: registerUser()\t "+user);
 		return "redirect:/";
 	}
+	
+	private void setUserRegistered(User res,HttpServletRequest req){
+		UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(res.getLogin(),res.getPassword(),res.getAuthorities());
+		
+		Authentication auth = (authToken);
+		SecurityContext sc = SecurityContextHolder.getContext();
+		sc.setAuthentication(auth);
+		HttpSession session = req.getSession(true);
+		session.setAttribute(HttpSessionSecurityContextRepository.SPRING_SECURITY_CONTEXT_KEY,sc);
+		
+	}
+	
 	@PostMapping("/signin")
 	public String signInUser(@Valid @ModelAttribute("user")User user, BindingResult result, HttpServletRequest req){
 		if(result.hasErrors()){
-			return ViewNames.loginPage;
+			return Pages.loginPage;
 		}
 		
 		User res = userService.doSignIn(user);
@@ -55,19 +72,12 @@ public class UserController {
 		
 		
 		if(res!=null){
-			
-			UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(res.getLogin(),res.getPassword(),res.getAuthorities());
-			
-			Authentication auth = (authToken);
-			SecurityContext sc = SecurityContextHolder.getContext();
-			sc.setAuthentication(auth);
-			HttpSession session = req.getSession(true);
-			session.setAttribute(HttpSessionSecurityContextRepository.SPRING_SECURITY_CONTEXT_KEY,sc);
+			setUserRegistered(res,req);
 			System.out.println("UserController: signInUser" + res);
-			return ViewNames.indexPage;
+			return "redirect:/";
 		}
 		System.out.println("UserController: signInUser() NULL \t "+res);
-		return "redirect:/";
+		return Pages.loginPage;
 	}
 	@GetMapping(value="/logout")
 	public String logoutPage (HttpServletRequest request, HttpServletResponse response) {

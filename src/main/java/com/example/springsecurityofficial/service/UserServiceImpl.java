@@ -4,8 +4,6 @@ import com.example.springsecurityofficial.dao.UserDAO;
 import com.example.springsecurityofficial.entity.user.User;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
@@ -30,7 +28,7 @@ public class UserServiceImpl implements UserService {
 				.password(user.getPassword())
 				.authorities(user.getRole().name())
 				.build();
-		
+		System.out.println("UserServiceImpl loadUserByUsername()" + userDetails);
 		return userDetails;
 	}
 	
@@ -42,8 +40,8 @@ public class UserServiceImpl implements UserService {
 	
 	@Override
 	@Transactional
-	public void createUser(User user) {
-		userDAO.createUser(user);
+	public User createUser(User user) {
+		return userDAO.createUser(user);
 	}
 	
 	@Override
@@ -55,6 +53,7 @@ public class UserServiceImpl implements UserService {
 	@Override
 	public User doSignIn(User user) {
 		User user1 =  userDAO.doSignIn(user);
+		System.out.println("UserServiceImpl: doSignIn() "+user1.getId());
 		return user1;
 	}
 	

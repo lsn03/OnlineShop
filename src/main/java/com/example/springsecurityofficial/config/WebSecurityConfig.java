@@ -8,14 +8,18 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.ProviderManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
+import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfiguration;
+import org.springframework.security.core.userdetails.User;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.provisioning.JdbcUserDetailsManager;
+import org.springframework.security.provisioning.UserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
 
 import javax.sql.DataSource;
@@ -30,10 +34,16 @@ public class WebSecurityConfig   {
 	
 	@Autowired
 	private PasswordEncoder passwordEncoder;
+	@Autowired
+	private DataSource dataSource;
 	
 	
-	
-	
+	@Bean
+	public AuthenticationManager authenticationManager(HttpSecurity http) throws Exception {
+		AuthenticationManagerBuilder authenticationManagerBuilder = http.getSharedObject(AuthenticationManagerBuilder.class);
+		authenticationManagerBuilder.userDetailsService(userService).passwordEncoder(passwordEncoder);
+		return authenticationManagerBuilder.build();
+	}
 	@Bean
 	public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
 	
@@ -41,21 +51,32 @@ public class WebSecurityConfig   {
 		http
 				
 				.authorizeHttpRequests((requests) -> requests
-						.requestMatchers("/", "/signin","/register","/contact_us","/static/**").permitAll()
+						.requestMatchers("/", "/signup","signin","/register","/contact_us","/static/**").permitAll()
 						.anyRequest().authenticated()
 				)
 				.formLogin((form) -> form
 						.loginPage("/login")
 						.permitAll()
 				)
-				.logout((logout) -> logout.permitAll());
+				.logout((logout) -> logout
+						.logoutUrl("/logout")
+						.invalidateHttpSession(true)
+						.deleteCookies("JSESSIONID")
+						.logoutSuccessUrl("/logout" + "?logout")
+						.permitAll());
 		
 		
 		return http.build();
 	}
-	
 	@Autowired
-	public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
-		auth.userDetailsService(userService);
+	public void configure(AuthenticationManagerBuilder auth) throws Exception {
+		auth.jdbcAuthentication()
+				.dataSource(dataSource)
+				.passwordEncoder(passwordEncoder)
+				.usersByUsernameQuery("select user_id " +
+						"login" +
+						"password" +
+						"role where login=?")
+		;
 	}
 }

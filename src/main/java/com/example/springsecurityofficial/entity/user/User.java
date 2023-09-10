@@ -1,6 +1,9 @@
 package com.example.springsecurityofficial.entity.user;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.Size;
+import org.antlr.v4.runtime.misc.NotNull;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -16,8 +19,12 @@ public class User implements UserDetails {
 	@Column(name = "user_id")
 	private int id;
 	@Column(name = "login")
+	@NotEmpty(message = "Имя пользователя не может быть пустым")
+	@Size(min = 4,max = 50,message = "Имя пользователя должно быть в диапазоне от 4 до 50")
 	private String login;
 	@Column(name = "password")
+	@NotEmpty
+	@Size(min=8,max=50,message = "Длина пароля должна быть в диапазоне от 8 до 50")
 	private String password;
 	@Column(name = "role")
 	@Enumerated(EnumType.STRING)

@@ -14,7 +14,7 @@ public class NavBarController {
 		return ViewNames.indexPage;
 	}
 	
-	@GetMapping("/chopping_cart")
+	@GetMapping("/shopping_cart")
 	public String getShoppingCartPage(){
 		return ViewNames.shoppingCartPage;
 	}

@@ -1,4 +1,4 @@
-package com.example.springsecurityofficial;
+package com.example.springsecurityofficial.controller;
 
 public class Pages {
 	public static final String catalogPage = "catalog-page";

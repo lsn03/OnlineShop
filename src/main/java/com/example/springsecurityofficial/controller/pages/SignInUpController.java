@@ -1,6 +1,6 @@
 package com.example.springsecurityofficial.controller.pages;
 
-import com.example.springsecurityofficial.Pages;
+import com.example.springsecurityofficial.controller.Pages;
 import com.example.springsecurityofficial.entity.user.User;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;

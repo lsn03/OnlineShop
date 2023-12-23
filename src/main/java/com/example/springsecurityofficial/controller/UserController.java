@@ -1,7 +1,5 @@
 package com.example.springsecurityofficial.controller;
 
-import com.example.springsecurityofficial.Pages;
-import com.example.springsecurityofficial.entity.user.Role;
 import com.example.springsecurityofficial.entity.user.User;
 import com.example.springsecurityofficial.service.UserService;
 import jakarta.servlet.http.HttpServletRequest;
@@ -21,7 +19,6 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 
 @Controller
 public class UserController {
@@ -63,11 +60,11 @@ public class UserController {
 	}
 
 	@PostMapping("/signin")
-	public String signInUser(@ModelAttribute User user, BindingResult result, HttpServletRequest req) {
+	public String signInUser(@Valid @ModelAttribute User user, BindingResult result, HttpServletRequest req) {
 		if (result.hasErrors()) {
 			return Pages.loginPage;
 		}
-//		User user = new User(login, password, Role.USER, password);
+
 		User res = userService.doSignIn(user);
 
 

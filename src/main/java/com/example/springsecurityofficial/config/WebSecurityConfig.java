@@ -9,6 +9,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.ProviderManager;
+import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -23,6 +24,8 @@ import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.provisioning.JdbcUserDetailsManager;
 import org.springframework.security.provisioning.UserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
+import org.springframework.security.web.csrf.CookieCsrfTokenRepository;
 
 import javax.sql.DataSource;
 
@@ -55,7 +58,8 @@ public class WebSecurityConfig   {
 		http
 				
 				.authorizeHttpRequests((requests) -> requests
-						.requestMatchers("/", "/signup","signin","/register","/contact_us","/static/**").permitAll()
+						.requestMatchers("/", "/signup","signin","/register","/contact_us","/static/**",
+								"/csrf").permitAll()
 						.requestMatchers(HttpMethod.GET,"/api/**").permitAll()
 						.anyRequest().authenticated()
 				)
@@ -69,7 +73,12 @@ public class WebSecurityConfig   {
 						.clearAuthentication(true)
 						.deleteCookies("JSESSIONID")
 						.logoutSuccessUrl("/logout" + "?logout")
-						.permitAll());
+						.permitAll())
+				.csrf(csrf -> csrf
+						.csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse())
+
+				);
+
 		
 		
 		return http.build();

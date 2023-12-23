@@ -14,9 +14,10 @@ import java.util.Optional;
 public class UserDaoImpl implements UserDAO {
 	@PersistenceContext
 	private EntityManager entityManager;
-	
+
 	@Autowired
 	private PasswordEncoder passwordEncoder;
+
 	@Override
 	public User createUser(User user) {
 		String userPassword = user.getPassword();
@@ -28,49 +29,48 @@ public class UserDaoImpl implements UserDAO {
 		System.out.println("crashFfter");
 		return findUserByLogin(user.getLogin());
 	}
-	
+
 	@Override
 	@Transactional
 	public User findUserByLogin(String userName) {
 		User user;
-		try{
-			user =  entityManager.createQuery(
+		try {
+			user = entityManager.createQuery(
 					"from User where login = :userName ", User.class
-			).setParameter("userName",userName).getSingleResult();
-		}catch (Exception e){
+			).setParameter("userName", userName).getSingleResult();
+		} catch (Exception e) {
 			user = null;
 		}
 		return user;
 	}
-	
+
 	@Override
 	public void saveUser(User user) {
-	
+
 	}
-	
+
 	@Override
 	public User doSignIn(User user) {
-		try{
-		User userfromDatabase =  entityManager.createQuery(
-				"from User where login = :userName ", User.class
-		).setParameter("userName",user.getLogin()).getSingleResult();
-		
-		if( passwordEncoder.matches(
-				user.getPassword(),
-				userfromDatabase.getPassword())
-		)
-		{
-			return userfromDatabase;
+		try {
+			User userfromDatabase = entityManager.createQuery(
+					"from User where login = :userName ", User.class
+			).setParameter("userName", user.getLogin()).getSingleResult();
+
+			if (passwordEncoder.matches(
+					user.getPassword(),
+					userfromDatabase.getPassword())
+			) {
+				return userfromDatabase;
 			}
-		}catch (Exception e){
+		} catch (Exception e) {
 			System.out.println(e.getMessage());
 			return null;
 		}
-		
+
 		return null;
-		
+
 	}
-	
+
 	@Override
 	public Optional<User> findByLogin(String username) {
 		return Optional.empty();

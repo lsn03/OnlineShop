@@ -30,8 +30,6 @@ public class User implements UserDetails {
 	private Role role;
 
 	@Transient
-	@NotEmpty
-	@Size(min = 4, max = 100, message = "Длина пароля должна быть в диапазоне от 4 до 30")
 	private String confirmPassword;
 
 	public User() {

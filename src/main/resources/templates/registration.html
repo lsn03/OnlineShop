@@ -6,115 +6,118 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
     <title>Register - GreyShop</title>
     <link rel="stylesheet" href="/static/assets/bootstrap/css/bootstrap.min.css">
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Montserrat:400,400i,700,700i,600,600i&amp;display=swap">
+    <link rel="stylesheet"
+          href="https://fonts.googleapis.com/css?family=Montserrat:400,400i,700,700i,600,600i&amp;display=swap">
     <link rel="stylesheet" href="/static/assets/fonts/simple-line-icons.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/baguettebox.js/1.11.1/baguetteBox.min.css">
     <link rel="stylesheet" href="/static/assets/css/vanilla-zoom.min.css">
+    <script src="/static/assets/js/get-token.js"></script>
+    <script src="/static/assets/js/sendData.js"></script>
 </head>
 
 <body>
-    <nav class="navbar navbar-light navbar-expand-lg fixed-top bg-white clean-navbar">
-        <div class="container"><a class="navbar-brand logo"th:href="@{/}">GreyShop</a><button data-bs-toggle="collapse" class="navbar-toggler" data-bs-target="#navcol-1"><span class="visually-hidden">Toggle navigation</span><span class="navbar-toggler-icon"></span></button>
-            <div class="collapse navbar-collapse" id="navcol-1">
-               <ul class="navbar-nav ms-auto">
-                    <li class="nav-item"><a class="nav-link" th:href="@{/}">Главная страница</a></li>
-                    <li class="nav-item"><a class="nav-link" th:href="@{catalog}">Каталог</a></li>
-                    <li class="nav-item"><a class="nav-link" th:href="@{/contact_us}">Связь с нами</a></li>
-                    <li class="nav-item"><a class="nav-link" th:href="@{/login}">Войти</a></li>
-                    <li class="nav-item"><a class="nav-link" th:href="@{/signup}">Зарегистрироваться</a></li>
+<nav class="navbar navbar-light navbar-expand-lg fixed-top bg-white clean-navbar">
+    <div class="container"><a class="navbar-brand logo" href="/">GreyShop</a>
+        <button data-bs-toggle="collapse" class="navbar-toggler" data-bs-target="#navcol-1"><span
+                class="visually-hidden">Toggle navigation</span><span class="navbar-toggler-icon"></span></button>
+        <div class="collapse navbar-collapse" id="navcol-1">
+            <ul class="navbar-nav ms-auto">
+                <li class="nav-item"><a class="nav-link" href="/">Главная страница</a></li>
+                <li class="nav-item"><a class="nav-link" href="/catalog">Каталог</a></li>
+                <li class="nav-item"><a class="nav-link" href="/contact_us">Связь с нами</a></li>
+                <li class="nav-item"><a class="nav-link" href="/login">Войти</a></li>
+                <li class="nav-item"><a class="nav-link" href="/signup">Зарегистрироваться</a></li>
+            </ul>
+        </div>
+    </div>
+</nav>
+<main class="page registration-page">
+    <section class="clean-block clean-form dark">
+        <div class="container">
+            <div class="block-heading">
+                <h2 class="text-info">Registration</h2>
+                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc quam urna, dignissim nec auctor in,
+                    mattis vitae leo.</p>
+            </div>
+
+            <form id="registerForm" action="/register" method="post">
+                <div class="mb-3">
+                    <label class="form-label" for="login">Name</label>
+                    <input class="form-control item" type="text" id="login" name="login">
+                    <ul id="loginErrors" class="error-list"></ul>
+
+                </div>
+                <div class="mb-3">
+                    <label class="form-label" for="password">Password</label>
+                    <input class="form-control item" type="password" id="password" name="password" >
+                    <ul id="passwordErrors" class="error-list"></ul>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label" for="confirmPassword">Confirm Password</label>
+                    <input class="form-control item" type="password" id="confirmPassword" name="confirmPassword" >
+
+
+
+                </div>
+
+                <input type="hidden" id="csrfToken" name="_csrf" value="">
+                <ul id="userErrors" class="error-list"></ul>
+
+                <input type="hidden" name="role" value="USER">
+                <button class="btn btn-primary" type="submit">Зарегистрироваться</button>
+                <a class="btn btn-primary" href="/login">Войти</a>
+            </form>
+        </div>
+    </section>
+</main>
+<footer class="page-footer dark">
+    <div class="container">
+        <div class="row">
+            <div class="col-sm-3">
+                <h5>Get started</h5>
+                <ul>
+                    <li><a href="#">Home</a></li>
+                    <li><a href="#">Sign up</a></li>
+                    <li><a href="#">Downloads</a></li>
+                </ul>
+            </div>
+            <div class="col-sm-3">
+                <h5>About us</h5>
+                <ul>
+                    <li><a href="#">Company Information</a></li>
+                    <li><a href="#">Contact us</a></li>
+                    <li><a href="#">Reviews</a></li>
+                </ul>
+            </div>
+            <div class="col-sm-3">
+                <h5>Support</h5>
+                <ul>
+                    <li><a href="#">FAQ</a></li>
+                    <li><a href="#">Help desk</a></li>
+                    <li><a href="#">Forums</a></li>
+                </ul>
+            </div>
+            <div class="col-sm-3">
+                <h5>Legal</h5>
+                <ul>
+                    <li><a href="#">Terms of Service</a></li>
+                    <li><a href="#">Terms of Use</a></li>
+                    <li><a href="#">Privacy Policy</a></li>
                 </ul>
             </div>
         </div>
-    </nav>
-    <main class="page registration-page">
-        <section class="clean-block clean-form dark">
-            <div class="container">
-                <div class="block-heading">
-                    <h2 class="text-info">Registration</h2>
-                    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc quam urna, dignissim nec auctor in, mattis vitae leo.</p>
-                </div>
-
-                <form th:action="@{/register}" method="post" th:object="${user}">
-                    <div class="mb-3">
-                        <label class="form-label" for="name">Name</label>
-                        <input class="form-control item" type="text" id="name" th:field="*{login}">
-                        <ul th:if="${#fields.hasErrors('login')}">
-                            <li th:each="error : ${#fields.errors('login')}" th:text="${error}"></li>
-                        </ul>
-                        <ul>
-                            <li th:if="${userExists}">Имя пользователя уже занято.</li>
-                        </ul>
-
-                    </div>
-                    <div class="mb-3">
-                        <label class="form-label" for="password">Password</label>
-                        <input class="form-control item" type="password" id="password"th:field="*{password}">
-                        <ul th:if="${#fields.hasErrors('password')}">
-                            <li th:each="error : ${#fields.errors('password')}" th:text="${error}"></li>
-                        </ul>
-                    </div>
-                    <div class="mb-3">
-                        <label class="form-label" for="confirmPassword">Confirm Password</label>
-                        <input class="form-control item" type="password" id="confirmPassword" th:field="*{confirmPassword}">
-                        <ul th:if="${passwordMismatch}">
-                            <li>Пароли не совпадают</li>
-                        </ul>
-                    </div>
-
-
-
-                    <input type="hidden" name="role" value="USER">
-                    <button class="btn btn-primary" type="submit">Зарегистрироваться</button>
-                    <a class="btn btn-primary" th:href="@{/login}">Войти</a>
-                </form>
-            </div>
-        </section>
-    </main>
-    <footer class="page-footer dark">
-        <div class="container">
-            <div class="row">
-                <div class="col-sm-3">
-                    <h5>Get started</h5>
-                    <ul>
-                        <li><a href="#">Home</a></li>
-                        <li><a href="#">Sign up</a></li>
-                        <li><a href="#">Downloads</a></li>
-                    </ul>
-                </div>
-                <div class="col-sm-3">
-                    <h5>About us</h5>
-                    <ul>
-                        <li><a href="#">Company Information</a></li>
-                        <li><a href="#">Contact us</a></li>
-                        <li><a href="#">Reviews</a></li>
-                    </ul>
-                </div>
-                <div class="col-sm-3">
-                    <h5>Support</h5>
-                    <ul>
-                        <li><a href="#">FAQ</a></li>
-                        <li><a href="#">Help desk</a></li>
-                        <li><a href="#">Forums</a></li>
-                    </ul>
-                </div>
-                <div class="col-sm-3">
-                    <h5>Legal</h5>
-                    <ul>
-                        <li><a href="#">Terms of Service</a></li>
-                        <li><a href="#">Terms of Use</a></li>
-                        <li><a href="#">Privacy Policy</a></li>
-                    </ul>
-                </div>
-            </div>
-        </div>
-        <div class="footer-copyright">
-            <p>© 2023 Copyright Text</p>
-        </div>
-    </footer>
-    <script src="/static/assets/bootstrap/js/bootstrap.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/baguettebox.js/1.11.1/baguetteBox.min.js"></script>
-    <script src="/static/assets/js/vanilla-zoom.js"></script>
-    <script src="/static/assets/js/theme.js"></script>
+    </div>
+    <div class="footer-copyright">
+        <p>© 2023 Copyright Text</p>
+    </div>
+</footer>
+<script src="/static/assets/bootstrap/js/bootstrap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/baguettebox.js/1.11.1/baguetteBox.min.js"></script>
+<script src="/static/assets/js/vanilla-zoom.js"></script>
+<script src="/static/assets/js/theme.js"></script>
 </body>
-
+<script>
+    fetchCsrfToken()
+    sendData('registerForm','/register');
+</script>
 </html>

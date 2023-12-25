@@ -23,13 +23,15 @@ public class User implements UserDetails {
 	private String login;
 	@Column(name = "password")
 	@NotEmpty
-	@Size(min = 5, max = 100, message = "Длина пароля должна быть в диапазоне от 4 до 20")
+	@Size(min = 4, max = 100, message = "Длина пароля должна быть в диапазоне от 4 до 30")
 	private String password;
 	@Column(name = "role")
 	@Enumerated(EnumType.STRING)
 	private Role role;
 
 	@Transient
+	@NotEmpty
+	@Size(min = 4, max = 100, message = "Длина пароля должна быть в диапазоне от 4 до 30")
 	private String confirmPassword;
 
 	public User() {

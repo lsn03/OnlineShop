@@ -32,26 +32,33 @@ public class UserController {
 	private UserService userService;
 
 	@PostMapping("/register")
-	public String registerUser(@Valid @ModelAttribute("user") User user, BindingResult result, HttpServletRequest req, Model model) {
+	public ResponseEntity<ApiResponse> registerUser(@Valid @ModelAttribute("user") User user, BindingResult result, HttpServletRequest req, Model model) {
 		if (result.hasErrors()) {
-			return Pages.registrationPage;
+			return getApiResponseResponseEntity(result);
 		}
 
 		if (!user.getConfirmPassword().equals(user.getPassword())) {
-			model.addAttribute("passwordMismatch", true);
-			return Pages.registrationPage;
+//			model.addAttribute("passwordMismatch", true);
+			return ResponseEntity.badRequest().body(new ApiResponse("passwordMismatch", Map.of(
+					"password", List.of("Пароли не совпадают")))
+			);
+
 		}
 		if (userService.isUserExist(user)) {
-			model.addAttribute("userExists", true);
-			return Pages.registrationPage;
+//			model.addAttribute("userExists", true);
+			return ResponseEntity.badRequest().body(new ApiResponse("userExists", Map.of(
+					"user", List.of("Пользователь с таким именем уже существует")))
+			);
+
 		}
 
 		User usercreated = userService.createUser(user);
 
 		setUserRegistered(usercreated, req);
 
-		System.out.println("UserController: registerUser()\t " + user);
-		return "redirect:/";
+
+//		return "redirect:/";
+		return ResponseEntity.ok(new ApiResponse("Login successful", null));
 	}
 
 	private void setUserRegistered(User res, HttpServletRequest req) {
@@ -68,9 +75,7 @@ public class UserController {
 	@PostMapping("/signin")
 	public ResponseEntity<ApiResponse> signInUser(@Valid @ModelAttribute User user, BindingResult result, HttpServletRequest req) {
 		if (result.hasErrors()) {
-			Map<String, List<String>> errors = result.getFieldErrors().stream()
-					.collect(Collectors.groupingBy(FieldError::getField, Collectors.mapping(fieldError -> fieldError.getDefaultMessage(), Collectors.toList())));
-			return ResponseEntity.badRequest().body(new ApiResponse("Validation failed", errors));
+			return getApiResponseResponseEntity(result);
 		}
 
 		User res = userService.doSignIn(user);
@@ -78,11 +83,16 @@ public class UserController {
 
 		if (res != null) {
 			setUserRegistered(res, req);
-			System.out.println("UserController: signInUser" + res);
+
 			return ResponseEntity.ok(new ApiResponse("Login successful", null));
 		}
-		System.out.println("UserController: signInUser() NULL \t " + res);
 		return ResponseEntity.badRequest().body(new ApiResponse("Login failed", Map.of("user", List.of("Ошибка в логине или пароле или пользователь не найден"))));
+	}
+
+	private static ResponseEntity<ApiResponse> getApiResponseResponseEntity(BindingResult result) {
+		Map<String, List<String>> errors = result.getFieldErrors().stream()
+				.collect(Collectors.groupingBy(FieldError::getField, Collectors.mapping(fieldError -> fieldError.getDefaultMessage(), Collectors.toList())));
+		return ResponseEntity.badRequest().body(new ApiResponse("Validation failed", errors));
 	}
 
 	@GetMapping(value = "/logout")

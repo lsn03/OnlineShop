@@ -19,7 +19,8 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/baguettebox.js/1.11.1/baguetteBox.min.js"></script>
 <script src="/static/assets/js/vanilla-zoom.js"></script>
 <script src="/static/assets/js/theme.js"></script>
-
+<script src="/static/assets/js/get-token.js"></script>
+<script src="/static/assets/js/sendData.js"></script>
 
 <body>
 
@@ -109,64 +110,9 @@
 </footer>
 <script>
 
-    fetch("/csrf", {
-        method: "GET",
-        headers: {
-            "Content-Type": "application/x-www-form-urlencoded",
-        },
-    })
-        .then((response) => response.json())
-        .then((data) => {
-            const csrfTokenInput = document.getElementById("csrfToken");
-            if (csrfTokenInput) {
-                csrfTokenInput.value = data.token;
-            }
-        })
-        .catch((error) => {
-            console.error("Error fetching CSRF token:", error);
-        });
+    fetchCsrfToken();
+    sendData('loginForm','/signin');
 
-    document.addEventListener('DOMContentLoaded', function () {
-        // Обработчик отправки формы
-        document.getElementById('loginForm').addEventListener('submit', function (event) {
-            // Отменяем стандартное поведение формы, чтобы избежать перезагрузки страницы
-            event.preventDefault();
-
-            // Получаем данные формы
-            var formData = new FormData(this);
-
-            // Отправляем POST-запрос на сервер
-            fetch('/signin', {
-                method: 'POST',
-                body: formData
-            })
-                .then(response => response.json())
-                .then(data => {
-                    // Обработка успешного ответа
-                    console.log(data);
-                    document.getElementById('loginErrors').innerHTML = '';
-                    document.getElementById('passwordErrors').innerHTML = '';
-                    document.getElementById('userErrors').innerHTML = '';
-                    if (data.errors) {
-                        // Отображение ошибок на странице
-                        Object.keys(data.errors).forEach(function (fieldName) {
-                            var errorList = document.getElementById(fieldName + 'Errors');
-                            data.errors[fieldName].forEach(function (error) {
-                                var listItem = document.createElement('li');
-                                listItem.textContent = error;
-                                errorList.appendChild(listItem);
-                            });
-                        });
-                    }else {
-                        window.location.href = "/";
-                    }
-                })
-                .catch(error => {
-                    // Обработка ошибки
-                    console.error('Error:', error);
-                });
-        });
-    });
 </script>
 </body>
 

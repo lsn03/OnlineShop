@@ -25,7 +25,12 @@ public class UserDaoImpl implements UserDAO {
 		user.setPassword(passwordEncoder.encode(userPassword));
 		System.out.println(user);
 		System.out.println("crashBefore and why?");
-		entityManager.persist(user);
+		try {
+			entityManager.persist(user);
+		} catch (Exception e) {
+			e.printStackTrace();
+//			throw new RuntimeException(e);
+		}
 		System.out.println("crashFfter");
 		return findUserByLogin(user.getLogin());
 	}
@@ -39,6 +44,7 @@ public class UserDaoImpl implements UserDAO {
 					"from User where login = :userName ", User.class
 			).setParameter("userName", userName).getSingleResult();
 		} catch (Exception e) {
+			System.out.println(e.getMessage());
 			user = null;
 		}
 		return user;
@@ -73,6 +79,6 @@ public class UserDaoImpl implements UserDAO {
 
 	@Override
 	public Optional<User> findByLogin(String username) {
-		return Optional.empty();
+		return Optional.of(findUserByLogin(username));
 	}
 }

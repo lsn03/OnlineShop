@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 @Controller
 public class CatalogController {
 	@GetMapping("/catalog")
-	public String getCatalogPage(){
+	public String getCatalogPage() {
 		return Pages.catalogPage;
 	}
 }

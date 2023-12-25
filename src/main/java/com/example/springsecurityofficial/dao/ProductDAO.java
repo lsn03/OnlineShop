@@ -7,10 +7,15 @@ import java.util.List;
 
 @Component
 public interface ProductDAO {
-	public List<Product> getAllProducts();
-	 void deleteProduct(Product product);
-	 void deleteProduct(int product);
-	public void updateProduct(Product product);
-	public Product getProduct(int id);
-	public void createProduct(Product product);
+	List<Product> getAllProducts();
+
+	void deleteProduct(Product product);
+
+	void deleteProduct(int product);
+
+	void updateProduct(Product product);
+
+	Product getProduct(int id);
+
+	void createProduct(Product product);
 }

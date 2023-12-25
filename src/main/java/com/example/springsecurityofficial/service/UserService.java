@@ -5,8 +5,12 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 
 public interface UserService extends UserDetailsService {
 	User createUser(User user);
+
 	void saveUser(User user);
+
 	boolean isUserExist(User user);
-	User doSignIn (User user);
-	User getUser (String name);
+
+	User doSignIn(User user);
+
+	User getUser(String name);
 }

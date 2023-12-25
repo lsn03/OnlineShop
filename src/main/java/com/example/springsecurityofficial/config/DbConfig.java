@@ -9,6 +9,7 @@ import org.springframework.orm.hibernate5.LocalSessionFactoryBean;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
+
 import javax.sql.DataSource;
 import java.io.IOException;
 import java.util.Properties;
@@ -60,7 +61,7 @@ public class DbConfig {
 		Properties hibernateProperties = new Properties();
 		hibernateProperties.put("hibernate.dialect", "org.hibernate.dialect.HSQLDialect");
 		hibernateProperties.put("hibernate.show_sql", false);
-		// other properties
+
 
 		return hibernateProperties;
 	}

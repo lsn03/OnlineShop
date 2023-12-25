@@ -47,15 +47,18 @@
                 <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc quam urna, dignissim nec auctor in,
                     mattis vitae leo.</p>
             </div>
-            <form action="/signin" method="post">
+            <form action="/signin" method="post" id="loginForm">
                 <div class="mb-3">
                     <label class="form-label" for="login">Name</label>
                     <input class="form-control item" type="text" id="login" name="login">
+                    <ul id="loginErrors" class="error-list"></ul>
                 </div>
                 <div class="mb-3"><label class="form-label" for="password">Password</label>
                     <input class="form-control" type="password" id="password" name="password">
+                    <ul id="passwordErrors" class="error-list"></ul>
                 </div>
                 <input type="hidden" id="csrfToken" name="_csrf" value="">
+                <ul id="userErrors" class="error-list"></ul>
 
                 <button class="btn btn-primary" type="submit">Войти</button>
                 <a class="btn btn-primary" href="/signup">Зарегистрироваться</a>
@@ -105,7 +108,7 @@
     </div>
 </footer>
 <script>
-    // Получаем токен CSRF с сервера
+
     fetch("/csrf", {
         method: "GET",
         headers: {
@@ -114,16 +117,56 @@
     })
         .then((response) => response.json())
         .then((data) => {
-            console.log(data.token)
             const csrfTokenInput = document.getElementById("csrfToken");
             if (csrfTokenInput) {
-                // Вставляем токен CSRF в скрытое поле формы
                 csrfTokenInput.value = data.token;
             }
         })
         .catch((error) => {
             console.error("Error fetching CSRF token:", error);
         });
+
+    document.addEventListener('DOMContentLoaded', function () {
+        // Обработчик отправки формы
+        document.getElementById('loginForm').addEventListener('submit', function (event) {
+            // Отменяем стандартное поведение формы, чтобы избежать перезагрузки страницы
+            event.preventDefault();
+
+            // Получаем данные формы
+            var formData = new FormData(this);
+
+            // Отправляем POST-запрос на сервер
+            fetch('/signin', {
+                method: 'POST',
+                body: formData
+            })
+                .then(response => response.json())
+                .then(data => {
+                    // Обработка успешного ответа
+                    console.log(data);
+                    document.getElementById('loginErrors').innerHTML = '';
+                    document.getElementById('passwordErrors').innerHTML = '';
+                    document.getElementById('userErrors').innerHTML = '';
+                    if (data.errors) {
+                        // Отображение ошибок на странице
+                        Object.keys(data.errors).forEach(function (fieldName) {
+                            var errorList = document.getElementById(fieldName + 'Errors');
+                            data.errors[fieldName].forEach(function (error) {
+                                var listItem = document.createElement('li');
+                                listItem.textContent = error;
+                                errorList.appendChild(listItem);
+                            });
+                        });
+                    }else {
+                        window.location.href = "/";
+                    }
+                })
+                .catch(error => {
+                    // Обработка ошибки
+                    console.error('Error:', error);
+                });
+        });
+    });
 </script>
 </body>
 

@@ -15,16 +15,16 @@ public class AudioInfo {
 	private String powerDynamic;
 	@Column(name = "Встроенные_динамики")
 	private String includedDynamic;
-	
+
 	public AudioInfo() {
 	}
-	
+
 	public AudioInfo(String headphoneOutput, String powerDynamic, String includedDynamic) {
 		this.headphoneOutput = headphoneOutput;
 		this.powerDynamic = powerDynamic;
 		this.includedDynamic = includedDynamic;
 	}
-	
+
 	@Override
 	public String toString() {
 		return "AudioInfo{" +
@@ -34,35 +34,35 @@ public class AudioInfo {
 				", includedDynamic='" + includedDynamic + '\'' +
 				'}';
 	}
-	
+
 	public int getId() {
 		return id;
 	}
-	
+
 	public void setId(int id) {
 		this.id = id;
 	}
-	
+
 	public String getHeadphoneOutput() {
 		return headphoneOutput;
 	}
-	
+
 	public void setHeadphoneOutput(String headphoneOutput) {
 		this.headphoneOutput = headphoneOutput;
 	}
-	
+
 	public String getPowerDynamic() {
 		return powerDynamic;
 	}
-	
+
 	public void setPowerDynamic(String powerDynamic) {
 		this.powerDynamic = powerDynamic;
 	}
-	
+
 	public String getIncludedDynamic() {
 		return includedDynamic;
 	}
-	
+
 	public void setIncludedDynamic(String includedDynamic) {
 		this.includedDynamic = includedDynamic;
 	}

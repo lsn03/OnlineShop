@@ -48,6 +48,7 @@ public class WebSecurityConfig {
 				.authorizeHttpRequests((requests) -> requests
 						.requestMatchers("/", "/login", "/signup", "signin", "/register", "/contact_us", "/static/**",
 								"/csrf").permitAll()
+						.requestMatchers("/logout").authenticated()
 						.requestMatchers(HttpMethod.GET, "/api/**").permitAll()
 						.requestMatchers("/login", "/signup").anonymous()
 						.anyRequest().authenticated()
@@ -58,10 +59,11 @@ public class WebSecurityConfig {
 //				)
 				.logout((logout) -> logout
 						.logoutUrl("/logout")
+						.permitAll()
 						.invalidateHttpSession(true)
 						.clearAuthentication(true)
 						.deleteCookies("JSESSIONID")
-						.logoutSuccessUrl("/logout" + "?logout")
+						.logoutSuccessUrl("/logout")
 						.permitAll())
 				.csrf(csrf -> csrf
 						.csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse())

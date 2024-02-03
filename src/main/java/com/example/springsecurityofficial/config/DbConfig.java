@@ -22,7 +22,8 @@ public class DbConfig {
 
 		DriverManagerDataSource dataSource = new DriverManagerDataSource();
 		dataSource.setDriverClassName("com.mysql.jdbc.Driver");
-		dataSource.setUrl("jdbc:mysql://localhost:3306/parserwebsite");
+
+		dataSource.setUrl("jdbc:mysql://mysqldb:3306/parserwebsite");
 		dataSource.setUsername("root");
 		dataSource.setPassword("root");
 
@@ -59,8 +60,9 @@ public class DbConfig {
 	private static Properties getHibernateProperties() {
 
 		Properties hibernateProperties = new Properties();
-		hibernateProperties.put("hibernate.dialect", "org.hibernate.dialect.HSQLDialect");
-		hibernateProperties.put("hibernate.show_sql", false);
+		hibernateProperties.put("hibernate.hbm2ddl.auto", "update");
+		hibernateProperties.put("hibernate.dialect", "org.hibernate.dialect.MySQL8Dialect");
+		hibernateProperties.put("hibernate.show_sql", true);
 
 
 		return hibernateProperties;

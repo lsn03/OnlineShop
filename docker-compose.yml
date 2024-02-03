@@ -1,0 +1,28 @@
+version: "3.8"
+services:
+  server:
+    build: .
+    restart: always
+    ports:
+      - 8080:8080
+      - 5005:5005
+    depends_on:
+      - mysqldb
+    environment:
+      - SPRING_PROFILES_ACTIVE=dev
+  mysqldb:
+    platform: linux/x86_64
+    image: "mysql:8.0"
+    restart: always
+    ports:
+      # computer port : in container
+      - 3307:3306
+    environment:
+      - MYSQL_USER=user
+      - MYSQL_PASSWORD=root
+      - MYSQL_ROOT_PASSWORD=root
+      - MYSQL_DATABASE=parserwebsite
+    volumes:
+      - mysql_data:/var/lib/mysql
+volumes:
+  mysql_data:
